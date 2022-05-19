@@ -21,11 +21,9 @@ const getVariable = async (name: string): Promise<void> => {
 
   // Download file and set permissions.
   await client.downloadArtifact(name, filePath, { createArtifactFolder: true });
-  await fs.chmod(filePath, '0777');
 
   // Read file and set output.
-  core.info(filePath);
-  const file = await fs.readFile(filePath);
+  const file = await fs.readFile(`./${filePath}`);
   core.setOutput('value', file.toString());
   core.info(`Got variable ${name} successfully.`);
 };

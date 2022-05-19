@@ -8460,10 +8460,8 @@ const getVariable = (name) => __awaiter(void 0, void 0, void 0, function* () {
     const filePath = path_1.default.join(ROOT_DIRECTORY, `${name}.txt`);
     // Download file and set permissions.
     yield client.downloadArtifact(name, filePath, { createArtifactFolder: true });
-    yield promises_1.default.chmod(filePath, '0777');
     // Read file and set output.
-    core.info(filePath);
-    const file = yield promises_1.default.readFile(filePath);
+    const file = yield promises_1.default.readFile(`./${filePath}`);
     core.setOutput('value', file.toString());
     core.info(`Got variable ${name} successfully.`);
 });
