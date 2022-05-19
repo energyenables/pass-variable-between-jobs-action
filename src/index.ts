@@ -18,9 +18,13 @@ const setVariable = async (name: string, value: string): Promise<void> => {
 const getVariable = async (name: string): Promise<void> => {
   const client = artifacts.create();
   const filePath = path.join(ROOT_DIRECTORY, name);
+
+  // Download file and set permissions.
   await fs.mkdir(ROOT_DIRECTORY, { recursive: true });
-  await fs.chmod(filePath, '0777');
   await client.downloadArtifact(name, filePath);
+  await fs.chmod(filePath, '0777');
+
+  // Read file and set output.
   const file = await fs.readFile(filePath)
   core.setOutput('value', file.toString());
   core.info(`Got variable ${name} successfully.`);
