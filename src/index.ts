@@ -56,13 +56,17 @@ const run = async (): Promise<void> => {
   const name = core.getInput("name", { required: true });
   const value = core.getInput("value", { required: mode === "set" });
   const wait = core.getBooleanInput("wait", { required: false });
-  const waitRetries = core.getInput("wait_retries", { required: false });
+  const waitIntervalString = core.getInput("wait_interval", {
+    required: false,
+  });
+  const waitRetriesString = core.getInput("wait_retries", { required: false });
 
   if (mode === "set") await setVariable(name, value);
   if (mode === "get" && !wait) await getVariable(name);
 
   if (mode === "get" && wait) {
-    const maxRetries = parseInt(waitRetries, 10) || 10;
+    const waitInterval = parseInt(waitIntervalString, 10) || 5000;
+    const maxRetries = parseInt(waitRetriesString, 10) || 10;
     let count = 0;
 
     const interval = setInterval(async () => {
@@ -78,7 +82,7 @@ const run = async (): Promise<void> => {
         await getVariable(name);
         clearInterval(interval);
       }
-    }, 1000);
+    }, waitInterval);
   }
 };
 

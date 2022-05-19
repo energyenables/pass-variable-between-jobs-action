@@ -8482,13 +8482,17 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     const name = core.getInput("name", { required: true });
     const value = core.getInput("value", { required: mode === "set" });
     const wait = core.getBooleanInput("wait", { required: false });
-    const waitRetries = core.getInput("wait_retries", { required: false });
+    const waitIntervalString = core.getInput("wait_interval", {
+        required: false,
+    });
+    const waitRetriesString = core.getInput("wait_retries", { required: false });
     if (mode === "set")
         yield setVariable(name, value);
     if (mode === "get" && !wait)
         yield getVariable(name);
     if (mode === "get" && wait) {
-        const maxRetries = parseInt(waitRetries, 10) || 10;
+        const waitInterval = parseInt(waitIntervalString, 10) || 5000;
+        const maxRetries = parseInt(waitRetriesString, 10) || 10;
         let count = 0;
         const interval = setInterval(() => __awaiter(void 0, void 0, void 0, function* () {
             if (count > maxRetries) {
@@ -8501,7 +8505,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 yield getVariable(name);
                 clearInterval(interval);
             }
-        }), 1000);
+        }), waitInterval);
     }
 });
 run();
