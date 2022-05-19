@@ -8456,7 +8456,10 @@ const getVariable = (name) => __awaiter(void 0, void 0, void 0, function* () {
     const client = artifacts.create();
     const filePath = getFilePath(name);
     // Download file and set permissions.
-    yield client.downloadArtifact(name, ROOT_DIRECTORY, { createArtifactFolder: true });
+    yield fs.mkdir(ROOT_DIRECTORY, { recursive: true });
+    yield client.downloadArtifact(name, ROOT_DIRECTORY);
+    yield fs.chmod(filePath, '0777');
+    yield fs.readdir(ROOT_DIRECTORY).then((files) => files.map(core.info));
     // Read file and set output.
     const file = yield fs.readFile(filePath);
     core.setOutput('value', file.toString());
