@@ -8472,6 +8472,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     const value = core.getInput("value", { required: mode === "set" });
     const wait = core.getBooleanInput("wait", { required: false });
     const waitRetries = core.getInput("wait_retries", { required: false });
+    core.info(`${wait} is type ${typeof wait}`);
     if (mode === "set")
         yield setVariable(name, value);
     if (mode === "get" && !wait)

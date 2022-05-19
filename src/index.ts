@@ -41,6 +41,8 @@ const run = async (): Promise<void> => {
   const wait = core.getBooleanInput("wait", { required: false });
   const waitRetries = core.getInput("wait_retries", { required: false });
 
+  core.info(`${wait} is type ${typeof wait}`);
+
   if (mode === "set") await setVariable(name, value);
   if (mode === "get" && !wait) await getVariable(name);
 
