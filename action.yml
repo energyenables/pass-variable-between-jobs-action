@@ -14,6 +14,12 @@ inputs:
   value:
     description: Variable value
     required: false
+  wait:
+    description: If set, will retry getting the varaible
+    required: false
+  wait_retries:
+    description: Number of times to retry the action
+    required: false
 outputs:
   value:
     description: Variable value
