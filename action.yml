@@ -1,8 +1,8 @@
 name: 'Wait for an artifact to become available'
+description: 'Streamlines passing variables between jobs in a workflow'
 branding:
   icon: box
   color: blue
-description: ''
 author: 'energyenables'
 inputs:
   name:
