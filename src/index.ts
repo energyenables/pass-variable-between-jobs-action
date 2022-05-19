@@ -4,11 +4,14 @@ import path from 'path';
 import * as core from "@actions/core";
 import * as artifacts from "@actions/artifact";
 
-const ROOT_DIRECTORY = '/tmp/variables';
+const ROOT_DIRECTORY = './tmp/variables';
+
+const getFilePath = (name: string) => `${ROOT_DIRECTORY}/${name}.txt`;
+
 
 const setVariable = async (name: string, value: string): Promise<void> => {
   const client = artifacts.create();
-  const filePath = path.join(ROOT_DIRECTORY, `${name}.txt`);
+  const filePath = getFilePath(name);
   await fs.mkdir(ROOT_DIRECTORY, { recursive: true });
   await fs.appendFile(filePath, value);
   await client.uploadArtifact(name, [filePath], ROOT_DIRECTORY);
@@ -17,13 +20,13 @@ const setVariable = async (name: string, value: string): Promise<void> => {
 
 const getVariable = async (name: string): Promise<void> => {
   const client = artifacts.create();
-  const filePath = path.join(ROOT_DIRECTORY, `${name}.txt`);
+  const filePath = getFilePath(name);
 
   // Download file and set permissions.
   await client.downloadArtifact(name, filePath, { createArtifactFolder: true });
 
   // Read file and set output.
-  const file = await fs.readFile(`.${filePath}`);
+  const file = await fs.readFile(filePath);
   core.setOutput('value', file.toString());
   core.info(`Got variable ${name} successfully.`);
 };

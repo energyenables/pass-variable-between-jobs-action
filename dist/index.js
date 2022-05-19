@@ -8443,13 +8443,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const promises_1 = __importDefault(__nccwpck_require__(3292));
-const path_1 = __importDefault(__nccwpck_require__(1017));
 const core = __importStar(__nccwpck_require__(2186));
 const artifacts = __importStar(__nccwpck_require__(2605));
-const ROOT_DIRECTORY = '/tmp/variables';
+const ROOT_DIRECTORY = './tmp/variables';
+const getFilePath = (name) => `${ROOT_DIRECTORY}/${name}.txt`;
 const setVariable = (name, value) => __awaiter(void 0, void 0, void 0, function* () {
     const client = artifacts.create();
-    const filePath = path_1.default.join(ROOT_DIRECTORY, `${name}.txt`);
+    const filePath = getFilePath(name);
     yield promises_1.default.mkdir(ROOT_DIRECTORY, { recursive: true });
     yield promises_1.default.appendFile(filePath, value);
     yield client.uploadArtifact(name, [filePath], ROOT_DIRECTORY);
@@ -8457,11 +8457,11 @@ const setVariable = (name, value) => __awaiter(void 0, void 0, void 0, function*
 });
 const getVariable = (name) => __awaiter(void 0, void 0, void 0, function* () {
     const client = artifacts.create();
-    const filePath = path_1.default.join(ROOT_DIRECTORY, `${name}.txt`);
+    const filePath = getFilePath(name);
     // Download file and set permissions.
     yield client.downloadArtifact(name, filePath, { createArtifactFolder: true });
     // Read file and set output.
-    const file = yield promises_1.default.readFile(`.${filePath}`);
+    const file = yield promises_1.default.readFile(filePath);
     core.setOutput('value', file.toString());
     core.info(`Got variable ${name} successfully.`);
 });
