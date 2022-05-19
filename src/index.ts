@@ -19,7 +19,7 @@ const getVariable = async (name: string): Promise<void> => {
   const filePath = path.join(ROOT_DIRECTORY, name);
   await client.downloadArtifact(filePath);
   const file = await fs.readFile(filePath)
-  core.setOutput(name, file.toString());
+  core.setOutput('value', file.toString());
   core.info(`Got variable ${name} successfully.`);
 };
 

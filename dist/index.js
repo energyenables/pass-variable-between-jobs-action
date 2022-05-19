@@ -8459,7 +8459,7 @@ const getVariable = (name) => __awaiter(void 0, void 0, void 0, function* () {
     const filePath = path_1.default.join(ROOT_DIRECTORY, name);
     yield client.downloadArtifact(filePath);
     const file = yield promises_1.default.readFile(filePath);
-    core.setOutput(name, file.toString());
+    core.setOutput('value', file.toString());
     core.info(`Got variable ${name} successfully.`);
 });
 const run = () => __awaiter(void 0, void 0, void 0, function* () {

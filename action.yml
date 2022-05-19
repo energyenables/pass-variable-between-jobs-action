@@ -5,12 +5,18 @@ branding:
   color: blue
 author: 'energyenables'
 inputs:
+  mode:
+    description: Set or get?
+    required: true
   name:
-    description: 'Artifact name'
+    description: Variable name
+    required: true
+  value:
+    description: Variable value
     required: false
-  path:
-    description: 'Destination path'
-    required: false
+outputs:
+  value:
+    description: Variable value
 runs:
   using: 'node16'
   main: 'dist/index.js'
