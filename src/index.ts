@@ -34,6 +34,23 @@ const getVariable = async (name: string): Promise<void> => {
   core.info(`Got variable ${name} successfully.`);
 };
 
+const checkVariable = async (
+  name: string,
+  count: number,
+  maxRetries: number
+) => {
+  try {
+    const client = artifacts.create();
+    await client.downloadArtifact(name, ROOT_DIRECTORY);
+    return true;
+  } catch (error) {
+    core.info(
+      `Waiting for ${name} to be set... (attempt ${count} / ${maxRetries})`
+    );
+    return false;
+  }
+};
+
 const run = async (): Promise<void> => {
   const mode = core.getInput("mode", { required: true });
   const name = core.getInput("name", { required: true });
@@ -41,13 +58,11 @@ const run = async (): Promise<void> => {
   const wait = core.getBooleanInput("wait", { required: false });
   const waitRetries = core.getInput("wait_retries", { required: false });
 
-  core.info(`${wait} is type ${typeof wait}`);
-
   if (mode === "set") await setVariable(name, value);
   if (mode === "get" && !wait) await getVariable(name);
 
   if (mode === "get" && wait) {
-    const maxRetries = waitRetries || 10;
+    const maxRetries = parseInt(waitRetries, 10) || 10;
     let count = 0;
 
     const interval = setInterval(async () => {
@@ -56,14 +71,12 @@ const run = async (): Promise<void> => {
         core.setFailed(`${value} still not set after ${maxRetries} tries.`);
       }
 
-      try {
+      count += 1;
+      const variableExists = await checkVariable(name, count, maxRetries);
+
+      if (variableExists) {
         await getVariable(name);
         clearInterval(interval);
-      } catch (error) {
-        count += 1;
-        core.info(
-          `Waiting for ${name} to be set... (attempt ${count} / ${maxRetries})`
-        );
       }
     }, 1000);
   }

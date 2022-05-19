@@ -8466,32 +8466,40 @@ const getVariable = (name) => __awaiter(void 0, void 0, void 0, function* () {
     core.setOutput("value", file.toString());
     core.info(`Got variable ${name} successfully.`);
 });
+const checkVariable = (name, count, maxRetries) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const client = artifacts.create();
+        yield client.downloadArtifact(name, ROOT_DIRECTORY);
+        return true;
+    }
+    catch (error) {
+        core.info(`Waiting for ${name} to be set... (attempt ${count} / ${maxRetries})`);
+        return false;
+    }
+});
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     const mode = core.getInput("mode", { required: true });
     const name = core.getInput("name", { required: true });
     const value = core.getInput("value", { required: mode === "set" });
     const wait = core.getBooleanInput("wait", { required: false });
     const waitRetries = core.getInput("wait_retries", { required: false });
-    core.info(`${wait} is type ${typeof wait}`);
     if (mode === "set")
         yield setVariable(name, value);
     if (mode === "get" && !wait)
         yield getVariable(name);
     if (mode === "get" && wait) {
-        const maxRetries = waitRetries || 10;
+        const maxRetries = parseInt(waitRetries, 10) || 10;
         let count = 0;
         const interval = setInterval(() => __awaiter(void 0, void 0, void 0, function* () {
             if (count > maxRetries) {
                 clearInterval(interval);
                 core.setFailed(`${value} still not set after ${maxRetries} tries.`);
             }
-            try {
+            count += 1;
+            const variableExists = yield checkVariable(name, count, maxRetries);
+            if (variableExists) {
                 yield getVariable(name);
                 clearInterval(interval);
-            }
-            catch (error) {
-                count += 1;
-                core.info(`Waiting for ${name} to be set... (attempt ${count} / ${maxRetries})`);
             }
         }), 1000);
     }
