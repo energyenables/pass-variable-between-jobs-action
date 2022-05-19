@@ -8449,7 +8449,7 @@ const artifacts = __importStar(__nccwpck_require__(2605));
 const ROOT_DIRECTORY = '/tmp/variables';
 const setVariable = (name, value) => __awaiter(void 0, void 0, void 0, function* () {
     const client = artifacts.create();
-    const filePath = path_1.default.join(ROOT_DIRECTORY, name);
+    const filePath = path_1.default.join(ROOT_DIRECTORY, `${name}.txt`);
     yield promises_1.default.mkdir(ROOT_DIRECTORY, { recursive: true });
     yield promises_1.default.appendFile(filePath, value);
     yield client.uploadArtifact(name, [filePath], ROOT_DIRECTORY);
@@ -8457,10 +8457,9 @@ const setVariable = (name, value) => __awaiter(void 0, void 0, void 0, function*
 });
 const getVariable = (name) => __awaiter(void 0, void 0, void 0, function* () {
     const client = artifacts.create();
-    const filePath = path_1.default.join(ROOT_DIRECTORY, name);
+    const filePath = path_1.default.join(ROOT_DIRECTORY, `${name}.txt`);
     // Download file and set permissions.
-    yield promises_1.default.mkdir(ROOT_DIRECTORY, { recursive: true });
-    yield client.downloadArtifact(name, filePath);
+    yield client.downloadArtifact(name, filePath, { createArtifactFolder: true });
     yield promises_1.default.chmod(filePath, '0777');
     // Read file and set output.
     core.info(filePath);

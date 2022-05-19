@@ -8,7 +8,7 @@ const ROOT_DIRECTORY = '/tmp/variables';
 
 const setVariable = async (name: string, value: string): Promise<void> => {
   const client = artifacts.create();
-  const filePath = path.join(ROOT_DIRECTORY, name);
+  const filePath = path.join(ROOT_DIRECTORY, `${name}.txt`);
   await fs.mkdir(ROOT_DIRECTORY, { recursive: true });
   await fs.appendFile(filePath, value);
   await client.uploadArtifact(name, [filePath], ROOT_DIRECTORY);
@@ -17,11 +17,10 @@ const setVariable = async (name: string, value: string): Promise<void> => {
 
 const getVariable = async (name: string): Promise<void> => {
   const client = artifacts.create();
-  const filePath = path.join(ROOT_DIRECTORY, name);
+  const filePath = path.join(ROOT_DIRECTORY, `${name}.txt`);
 
   // Download file and set permissions.
-  await fs.mkdir(ROOT_DIRECTORY, { recursive: true });
-  await client.downloadArtifact(name, filePath);
+  await client.downloadArtifact(name, filePath, { createArtifactFolder: true });
   await fs.chmod(filePath, '0777');
 
   // Read file and set output.
