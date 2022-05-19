@@ -21,7 +21,7 @@ const getVariable = async (name: string): Promise<void> => {
   const filePath = getFilePath(name);
 
   // Download file and set permissions.
-  await client.downloadArtifact(name, filePath, { createArtifactFolder: true });
+  await client.downloadArtifact(name, ROOT_DIRECTORY, { createArtifactFolder: true });
 
   // Read file and set output.
   const file = await fs.readFile(filePath);

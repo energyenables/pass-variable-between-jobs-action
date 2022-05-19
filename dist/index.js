@@ -8456,7 +8456,7 @@ const getVariable = (name) => __awaiter(void 0, void 0, void 0, function* () {
     const client = artifacts.create();
     const filePath = getFilePath(name);
     // Download file and set permissions.
-    yield client.downloadArtifact(name, filePath, { createArtifactFolder: true });
+    yield client.downloadArtifact(name, ROOT_DIRECTORY, { createArtifactFolder: true });
     // Read file and set output.
     const file = yield fs.readFile(filePath);
     core.setOutput('value', file.toString());
