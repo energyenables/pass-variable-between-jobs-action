@@ -1,0 +1,16 @@
+name: 'Wait for an artifact to become available'
+branding:
+  icon: box
+  color: blue
+description: ''
+author: 'energyenables'
+inputs:
+  name:
+    description: 'Artifact name'
+    required: false
+  path:
+    description: 'Destination path'
+    required: false
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
