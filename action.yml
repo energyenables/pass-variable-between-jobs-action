@@ -1,4 +1,4 @@
-name: 'Wait for an artifact to become available'
+name: pass-variable-between-jobs-action
 description: 'Streamlines passing variables between jobs in a workflow'
 branding:
   icon: box
