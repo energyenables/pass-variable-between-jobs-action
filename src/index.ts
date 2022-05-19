@@ -56,8 +56,9 @@ const run = async (): Promise<void> => {
 
       try {
         getVariable(name);
-        count += 1;
+        clearInterval(interval);
       } catch (error) {
+        count += 1;
         core.info(
           `Waiting for ${name} to be set... (attempt ${count} / ${maxRetries})`
         );

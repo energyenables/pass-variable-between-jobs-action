@@ -8486,9 +8486,10 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             }
             try {
                 getVariable(name);
-                count += 1;
+                clearInterval(interval);
             }
             catch (error) {
+                count += 1;
                 core.info(`Waiting for ${name} to be set... (attempt ${count} / ${maxRetries})`);
             }
         }, 1000);
