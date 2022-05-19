@@ -16,6 +16,8 @@ inputs:
     required: false
   wait:
     description: If set, will retry getting the varaible
+    type: boolean
+    default: false
     required: false
   wait_retries:
     description: Number of times to retry the action
