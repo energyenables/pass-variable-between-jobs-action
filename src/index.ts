@@ -1,6 +1,4 @@
-import fs from 'fs/promises';
-import path from 'path';
-
+import * as fs from 'fs/promises';
 import * as core from "@actions/core";
 import * as artifacts from "@actions/artifact";
 
