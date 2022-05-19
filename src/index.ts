@@ -6,12 +6,15 @@ const ROOT_DIRECTORY = './tmp/variables';
 
 const getFilePath = (name: string) => `${ROOT_DIRECTORY}/${name}.txt`;
 
-
 const setVariable = async (name: string, value: string): Promise<void> => {
   const client = artifacts.create();
   const filePath = getFilePath(name);
+
+  // Make root directory and create file.
   await fs.mkdir(ROOT_DIRECTORY, { recursive: true });
   await fs.appendFile(filePath, value);
+
+  // Upload file as artifact.
   await client.uploadArtifact(name, [filePath], ROOT_DIRECTORY);
   core.info(`Set variable ${name} successfully.`);
 };
@@ -24,8 +27,6 @@ const getVariable = async (name: string): Promise<void> => {
   await fs.mkdir(ROOT_DIRECTORY, { recursive: true });
   await client.downloadArtifact(name, ROOT_DIRECTORY);
   await fs.chmod(filePath, '0777');
-
-  await fs.readdir(ROOT_DIRECTORY).then((files) => files.map(core.info));
 
   // Read file and set output.
   const file = await fs.readFile(filePath);

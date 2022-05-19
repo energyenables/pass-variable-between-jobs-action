@@ -8447,8 +8447,10 @@ const getFilePath = (name) => `${ROOT_DIRECTORY}/${name}.txt`;
 const setVariable = (name, value) => __awaiter(void 0, void 0, void 0, function* () {
     const client = artifacts.create();
     const filePath = getFilePath(name);
+    // Make root directory and create file.
     yield fs.mkdir(ROOT_DIRECTORY, { recursive: true });
     yield fs.appendFile(filePath, value);
+    // Upload file as artifact.
     yield client.uploadArtifact(name, [filePath], ROOT_DIRECTORY);
     core.info(`Set variable ${name} successfully.`);
 });
@@ -8459,7 +8461,6 @@ const getVariable = (name) => __awaiter(void 0, void 0, void 0, function* () {
     yield fs.mkdir(ROOT_DIRECTORY, { recursive: true });
     yield client.downloadArtifact(name, ROOT_DIRECTORY);
     yield fs.chmod(filePath, '0777');
-    yield fs.readdir(ROOT_DIRECTORY).then((files) => files.map(core.info));
     // Read file and set output.
     const file = yield fs.readFile(filePath);
     core.setOutput('value', file.toString());
