@@ -8466,7 +8466,7 @@ const getVariable = (name) => __awaiter(void 0, void 0, void 0, function* () {
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     const mode = core.getInput('mode', { required: true });
     const name = core.getInput('name', { required: true });
-    const value = core.getInput('value', { required: true });
+    const value = core.getInput('value', { required: mode === 'set' });
     if (mode === 'set')
         yield setVariable(name, value);
     if (mode === 'get')

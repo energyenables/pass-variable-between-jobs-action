@@ -27,7 +27,7 @@ const getVariable = async (name: string): Promise<void> => {
 const run = async (): Promise<void> => {
   const mode = core.getInput('mode', { required: true });
   const name = core.getInput('name', { required: true })
-  const value = core.getInput('value', { required: true })
+  const value = core.getInput('value', { required: mode === 'set' })
 
   if (mode === 'set') await setVariable(name, value);
   if (mode === 'get') await getVariable(name);
