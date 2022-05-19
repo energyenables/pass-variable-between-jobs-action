@@ -8480,20 +8480,20 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     if (mode === "get" && wait) {
         const maxRetries = waitRetries || 10;
         let count = 0;
-        const interval = setInterval(() => {
+        const interval = setInterval(() => __awaiter(void 0, void 0, void 0, function* () {
             if (count > maxRetries) {
                 clearInterval(interval);
                 core.setFailed(`${value} still not set after ${maxRetries} tries.`);
             }
             try {
-                getVariable(name);
+                yield getVariable(name);
                 clearInterval(interval);
             }
             catch (error) {
                 count += 1;
                 core.info(`Waiting for ${name} to be set... (attempt ${count} / ${maxRetries})`);
             }
-        }, 1000);
+        }), 1000);
     }
 });
 run();

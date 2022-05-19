@@ -50,14 +50,14 @@ const run = async (): Promise<void> => {
     const maxRetries = waitRetries || 10;
     let count = 0;
 
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
       if (count > maxRetries) {
         clearInterval(interval);
         core.setFailed(`${value} still not set after ${maxRetries} tries.`);
       }
 
       try {
-        getVariable(name);
+        await getVariable(name);
         clearInterval(interval);
       } catch (error) {
         count += 1;
