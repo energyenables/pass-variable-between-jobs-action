@@ -8459,6 +8459,7 @@ const getVariable = (name) => __awaiter(void 0, void 0, void 0, function* () {
     const client = artifacts.create();
     const filePath = path_1.default.join(ROOT_DIRECTORY, name);
     yield promises_1.default.mkdir(ROOT_DIRECTORY, { recursive: true });
+    yield promises_1.default.chmod(filePath, '0777');
     yield client.downloadArtifact(name, filePath);
     const file = yield promises_1.default.readFile(filePath);
     core.setOutput('value', file.toString());
