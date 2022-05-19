@@ -8470,13 +8470,13 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     const mode = core.getInput("mode", { required: true });
     const name = core.getInput("name", { required: true });
     const value = core.getInput("value", { required: mode === "set" });
-    const wait = core.getInput("wait", { required: false });
+    const wait = core.getBooleanInput("wait", { required: false });
     const waitRetries = core.getInput("wait_retries", { required: false });
     if (mode === "set")
         yield setVariable(name, value);
-    if (mode === "get" && wait !== "true")
+    if (mode === "get" && !wait)
         yield getVariable(name);
-    if (mode === "get" && wait === "true") {
+    if (mode === "get" && wait) {
         const maxRetries = waitRetries || 10;
         let count = 0;
         const interval = setInterval(() => {
