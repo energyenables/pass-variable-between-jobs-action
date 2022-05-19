@@ -8450,6 +8450,7 @@ const ROOT_DIRECTORY = '/tmp/variables';
 const setVariable = (name, value) => __awaiter(void 0, void 0, void 0, function* () {
     const client = artifacts.create();
     const filePath = path_1.default.join(ROOT_DIRECTORY, name);
+    yield promises_1.default.mkdir(ROOT_DIRECTORY, { recursive: true });
     yield promises_1.default.appendFile(filePath, value);
     yield client.uploadArtifact(name, [filePath], ROOT_DIRECTORY);
     core.info(`Set variable ${name} successfully.`);

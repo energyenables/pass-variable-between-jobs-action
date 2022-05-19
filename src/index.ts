@@ -9,6 +9,7 @@ const ROOT_DIRECTORY = '/tmp/variables';
 const setVariable = async (name: string, value: string): Promise<void> => {
   const client = artifacts.create();
   const filePath = path.join(ROOT_DIRECTORY, name);
+  await fs.mkdir(ROOT_DIRECTORY, { recursive: true });
   await fs.appendFile(filePath, value);
   await client.uploadArtifact(name, [filePath], ROOT_DIRECTORY);
   core.info(`Set variable ${name} successfully.`);
