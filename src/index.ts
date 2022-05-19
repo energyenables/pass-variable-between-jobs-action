@@ -25,7 +25,8 @@ const getVariable = async (name: string): Promise<void> => {
   await fs.chmod(filePath, '0777');
 
   // Read file and set output.
-  const file = await fs.readFile(filePath)
+  core.info(filePath);
+  const file = await fs.readFile(filePath);
   core.setOutput('value', file.toString());
   core.info(`Got variable ${name} successfully.`);
 };
