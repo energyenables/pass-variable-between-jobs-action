@@ -8461,7 +8461,7 @@ const getVariable = (name) => __awaiter(void 0, void 0, void 0, function* () {
     // Download file and set permissions.
     yield client.downloadArtifact(name, filePath, { createArtifactFolder: true });
     // Read file and set output.
-    const file = yield promises_1.default.readFile(`./${filePath}`);
+    const file = yield promises_1.default.readFile(`.${filePath}`);
     core.setOutput('value', file.toString());
     core.info(`Got variable ${name} successfully.`);
 });
