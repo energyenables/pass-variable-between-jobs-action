@@ -8442,7 +8442,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const fs = __importStar(__nccwpck_require__(3292));
 const core = __importStar(__nccwpck_require__(2186));
 const artifacts = __importStar(__nccwpck_require__(2605));
-const ROOT_DIRECTORY = './tmp/variables';
+const ROOT_DIRECTORY = "./tmp/variables";
 const getFilePath = (name) => `${ROOT_DIRECTORY}/${name}.txt`;
 const setVariable = (name, value) => __awaiter(void 0, void 0, void 0, function* () {
     const client = artifacts.create();
@@ -8460,20 +8460,39 @@ const getVariable = (name) => __awaiter(void 0, void 0, void 0, function* () {
     // Download file and set permissions.
     yield fs.mkdir(ROOT_DIRECTORY, { recursive: true });
     yield client.downloadArtifact(name, ROOT_DIRECTORY);
-    yield fs.chmod(filePath, '0777');
+    yield fs.chmod(filePath, "0777");
     // Read file and set output.
     const file = yield fs.readFile(filePath);
-    core.setOutput('value', file.toString());
+    core.setOutput("value", file.toString());
     core.info(`Got variable ${name} successfully.`);
 });
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
-    const mode = core.getInput('mode', { required: true });
-    const name = core.getInput('name', { required: true });
-    const value = core.getInput('value', { required: mode === 'set' });
-    if (mode === 'set')
+    const mode = core.getInput("mode", { required: true });
+    const name = core.getInput("name", { required: true });
+    const value = core.getInput("value", { required: mode === "set" });
+    const wait = core.getInput("wait", { required: false });
+    const waitRetries = core.getInput("wait_retries", { required: false });
+    if (mode === "set")
         yield setVariable(name, value);
-    if (mode === 'get')
+    if (mode === "get" && wait !== "true")
         yield getVariable(name);
+    if (mode === "get" && wait === "true") {
+        const maxRetries = waitRetries || 10;
+        let count = 0;
+        const interval = setInterval(() => {
+            if (count > maxRetries) {
+                clearInterval(interval);
+                core.setFailed(`${value} still not set after ${maxRetries} tries.`);
+            }
+            try {
+                getVariable(name);
+                count += 1;
+            }
+            catch (error) {
+                core.info(`Waiting for ${name} to be set... (attempt ${count} / ${maxRetries})`);
+            }
+        }, 1000);
+    }
 });
 run();
 
