@@ -1,5 +1,5 @@
 {
-  "name": "@energyenables/wait-for-artifact-action",
+  "name": "@energyenables/pass-variable-between-jobs-action",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",

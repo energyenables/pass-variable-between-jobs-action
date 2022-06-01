@@ -15,9 +15,10 @@ inputs:
     description: Variable value
     required: false
   wait:
-    description: If set, will retry getting the varaible
+    description: If set, will retry getting the variable
     type: boolean
     default: false
+    required: false
   wait_interval:
     description: How long to wait between retries
     required: false
